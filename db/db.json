@@ -1,27 +1,5 @@
 {
-  "tasks": [
-    {
-      "id": "2c56",
-      "createdat": 1749627043028,
-      "task": "ervwgv",
-      "updatedat": 1749627069826,
-      "status": true
-    },
-    {
-      "id": "e891",
-      "createdat": 1749627044179,
-      "task": "efvwe",
-      "updatedat": 1749627070279,
-      "status": true
-    },
-    {
-      "id": "e193",
-      "createdat": 1749627045436,
-      "task": "vwrv",
-      "updatedat": 1749627070608,
-      "status": true
-    }
-  ],
+  "tasks": [],
   "notes": [
     {
       "id": "1",
