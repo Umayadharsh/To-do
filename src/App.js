@@ -12,7 +12,7 @@ function App() {
   
     
   function addtodo() {
-  fetch("https://to-do-backend1.onrender.com//tasks", {
+  fetch("https://to-do-backend1.onrender.com/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -32,7 +32,7 @@ function App() {
 async function toggleStatus(id) {
   try {
     // Step 1: Fetch existing task
-    const res = await fetch(`https://to-do-backend1.onrender.com//tasks/${id}`);
+    const res = await fetch(`https://to-do-backend1.onrender.com/tasks/${id}`);
     if (!res.ok) throw new Error(`Failed to fetch task: ${res.status}`);
     const task = await res.json();
 
@@ -44,7 +44,7 @@ async function toggleStatus(id) {
     };
 
     // Step 3: PUT updated task
-    const updateRes = await fetch(`https://to-do-backend1.onrender.com//tasks/${id}`, {
+    const updateRes = await fetch(`https://to-do-backend1.onrender.com/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedTask)
@@ -66,7 +66,7 @@ async function toggleStatus(id) {
 
   
   function deleteTodo(id) {
-  fetch(`https://to-do-backend1.onrender.com//tasks/${id}`, {
+  fetch(`https://to-do-backend1.onrender.com/tasks/${id}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" }
   })
