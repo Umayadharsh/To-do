@@ -1,42 +1,80 @@
 import express from "express";
 import cors from "cors";
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+// Required for __dirname in ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = parseInt(process.env.PORT) || 3001;
 
+// Middlewares
 app.use(cors());
 app.use(express.json());
 
-const dbFile = "db.json";
+// ✅ Correct file path to db.json
+const dbFile = path.join(__dirname, "db", "db.json");
 
+// Helper to read JSON
+function readData() {
+  const raw = fs.readFileSync(dbFile, "utf-8");
+  return JSON.parse(raw);
+}
+
+// Helper to write JSON
+function writeData(data) {
+  fs.writeFileSync(dbFile, JSON.stringify(data, null, 2));
+}
+
+// Routes
 app.get("/tasks", (req, res) => {
-  const data = JSON.parse(fs.readFileSync(dbFile));
-  res.json(data.tasks);
+  try {
+    const data = readData();
+    res.json(data.tasks);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to read tasks" });
+  }
 });
 
 app.post("/tasks", (req, res) => {
-  const data = JSON.parse(fs.readFileSync(dbFile));
-  const newTask = { id: Date.now(), ...req.body };
-  data.tasks.push(newTask);
-  fs.writeFileSync(dbFile, JSON.stringify(data));
-  res.json(newTask);
+  try {
+    const data = readData();
+    const newTask = { id: Date.now(), ...req.body };
+    data.tasks.push(newTask);
+    writeData(data);
+    res.json(newTask);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to create task" });
+  }
 });
 
 app.put("/tasks/:id", (req, res) => {
-  const data = JSON.parse(fs.readFileSync(dbFile));
-  const taskIndex = data.tasks.findIndex((t) => t.id === req.params.id);
-  if (taskIndex === -1) return res.status(404).json({ error: "Task not found" });
-  data.tasks[taskIndex] = { ...data.tasks[taskIndex], ...req.body };
-  fs.writeFileSync(dbFile, JSON.stringify(data));
-  res.json(data.tasks[taskIndex]);
+  try {
+    const data = readData();
+    const id = parseInt(req.params.id);
+    const index = data.tasks.findIndex(t => t.id === id);
+    if (index === -1) return res.status(404).json({ error: "Task not found" });
+    data.tasks[index] = { ...data.tasks[index], ...req.body };
+    writeData(data);
+    res.json(data.tasks[index]);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update task" });
+  }
 });
 
 app.delete("/tasks/:id", (req, res) => {
-  const data = JSON.parse(fs.readFileSync(dbFile));
-  data.tasks = data.tasks.filter((t) => t.id !== req.params.id);
-  fs.writeFileSync(dbFile, JSON.stringify(data));
-  res.json({ message: "Task deleted" });
+  try {
+    const data = readData();
+    const id = parseInt(req.params.id);
+    data.tasks = data.tasks.filter(t => t.id !== id);
+    writeData(data);
+    res.json({ message: "Task deleted" });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete task" });
+  }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
