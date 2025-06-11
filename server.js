@@ -1,31 +1,42 @@
-const express = require('express');
-const cors = require('cors');
+import express from "express";
+import cors from "cors";
+import fs from "fs";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+const PORT = process.env.PORT;
 
 app.use(cors());
 app.use(express.json());
 
-// Dummy tasks (replace with DB or dynamic logic in future)
-const tasks = [
-  { id: 1, task: "Buy milk", status: false, updatedat: Date.now() },
-  { id: 2, task: "Do homework", status: true, updatedat: Date.now() }
-];
+const dbFile = "db.json";
 
-// GET /tasks route
-app.get('/tasks', (req, res) => {
-  res.json(tasks);
+app.get("/tasks", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(dbFile));
+  res.json(data.tasks);
 });
 
-// Root route (just to confirm it works)
-app.get('/', (req, res) => {
-  res.send('Backend is working! Try GET /tasks');
+app.post("/tasks", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(dbFile));
+  const newTask = { id: Date.now(), ...req.body };
+  data.tasks.push(newTask);
+  fs.writeFileSync(dbFile, JSON.stringify(data));
+  res.json(newTask);
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.put("/tasks/:id", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(dbFile));
+  const taskIndex = data.tasks.findIndex((t) => t.id == req.params.id);
+  if (taskIndex === -1) return res.status(404).json({ error: "Task not found" });
+  data.tasks[taskIndex] = { ...data.tasks[taskIndex], ...req.body };
+  fs.writeFileSync(dbFile, JSON.stringify(data));
+  res.json(data.tasks[taskIndex]);
 });
+
+app.delete("/tasks/:id", (req, res) => {
+  const data = JSON.parse(fs.readFileSync(dbFile));
+  data.tasks = data.tasks.filter((t) => t.id != req.params.id);
+  fs.writeFileSync(dbFile, JSON.stringify(data));
+  res.json({ message: "Task deleted" });
+});
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
