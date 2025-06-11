@@ -1,0 +1,39 @@
+{
+  "tasks": [
+    {
+      "id": "2c56",
+      "createdat": 1749627043028,
+      "task": "ervwgv",
+      "updatedat": 1749627069826,
+      "status": true
+    },
+    {
+      "id": "e891",
+      "createdat": 1749627044179,
+      "task": "efvwe",
+      "updatedat": 1749627070279,
+      "status": true
+    },
+    {
+      "id": "e193",
+      "createdat": 1749627045436,
+      "task": "vwrv",
+      "updatedat": 1749627070608,
+      "status": true
+    }
+  ],
+  "notes": [
+    {
+      "id": "1",
+      "note": "Remember to schedule the team meeting",
+      "created_at": "2025-06-11T12:00:00Z",
+      "updated_at": "2025-06-11T12:00:00Z"
+    },
+    {
+      "id": "2",
+      "note": "Discuss the new marketing strategy",
+      "created_at": "2025-06-11T13:00:00Z",
+      "updated_at": "2025-06-11T13:10:00Z"
+    }
+  ]
+}
