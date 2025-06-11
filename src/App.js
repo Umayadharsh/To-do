@@ -4,7 +4,7 @@ function App() {
   const [todo, setTodo] = useState('');
   const [todoList, setTodolist] = useState([]);
 
-  const fetchTasks = () => { fetch("https://your-backend-url.onrender.com/tasks").then((data)=> data.json()).then((data)=> setTodolist(data)).catch(err => console.log(err))}
+  const fetchTasks = () => { fetch("https://todo-backend-zkm1.onrender.com/tasks").then((data)=> data.json()).then((data)=> setTodolist(data)).catch(err => console.log(err))}
   useEffect (()=> {
         fetchTasks() 
     },[])
@@ -12,7 +12,7 @@ function App() {
   
     
   function addtodo() {
-  fetch("https://your-backend-url.onrender.com/tasks", {
+  fetch("https://todo-backend-zkm1.onrender.com/tasks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -32,7 +32,7 @@ function App() {
 async function toggleStatus(id) {
   try {
     // Step 1: Fetch existing task
-    const res = await fetch(`https://your-backend-url.onrender.com/tasks/${id}`);
+    const res = await fetch(`https://todo-backend-zkm1.onrender.com/tasks/${id}`);
     if (!res.ok) throw new Error(`Failed to fetch task: ${res.status}`);
     const task = await res.json();
 
@@ -44,7 +44,7 @@ async function toggleStatus(id) {
     };
 
     // Step 3: PUT updated task
-    const updateRes = await fetch(`https://your-backend-url.onrender.com/tasks/${id}`, {
+    const updateRes = await fetch(`https://todo-backend-zkm1.onrender.com/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedTask)
@@ -66,7 +66,7 @@ async function toggleStatus(id) {
 
   
   function deleteTodo(id) {
-  fetch(`http://localhost:3001/tasks/${id}`, {
+  fetch(`https://todo-backend-zkm1.onrender.com/tasks/${id}`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" }
   })
