@@ -4,10 +4,14 @@ function App() {
   const [todo, setTodo] = useState('');
   const [todoList, setTodolist] = useState([]);
 
-  const fetchTasks = () => { fetch("https://to-do-backend1.onrender.com/tasks").then((data)=> data.json()).then((data)=> setTodolist(data)).catch(err => console.log(err))}
-  useEffect (()=> {
-        fetchTasks() 
-    },[])
+  const fetchTasks = () => {
+  fetch("https://to-do-backend1.onrender.com/tasks")
+    .then((res) => res.json())
+    .then((data) =>
+      setTodolist(data.map(task => ({ ...task, status: Boolean(task.status) })))
+    )
+    .catch((err) => console.error(err));
+};
 
   
     
