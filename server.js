@@ -1,16 +1,17 @@
 const express = require('express');
-const path = require('path');
+const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
-// Serve static files from React build
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(cors());
+app.use(express.json());
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+// Sample API
+app.get('/tasks', (req, res) => {
+  res.json([{ id: 1, title: 'Task 1' }]);
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
