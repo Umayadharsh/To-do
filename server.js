@@ -3,7 +3,7 @@ import cors from "cors";
 import fs from "fs";
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = parseInt(process.env.PORT) || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -25,7 +25,7 @@ app.post("/tasks", (req, res) => {
 
 app.put("/tasks/:id", (req, res) => {
   const data = JSON.parse(fs.readFileSync(dbFile));
-  const taskIndex = data.tasks.findIndex((t) => t.id == req.params.id);
+  const taskIndex = data.tasks.findIndex((t) => t.id === req.params.id);
   if (taskIndex === -1) return res.status(404).json({ error: "Task not found" });
   data.tasks[taskIndex] = { ...data.tasks[taskIndex], ...req.body };
   fs.writeFileSync(dbFile, JSON.stringify(data));
@@ -34,7 +34,7 @@ app.put("/tasks/:id", (req, res) => {
 
 app.delete("/tasks/:id", (req, res) => {
   const data = JSON.parse(fs.readFileSync(dbFile));
-  data.tasks = data.tasks.filter((t) => t.id != req.params.id);
+  data.tasks = data.tasks.filter((t) => t.id !== req.params.id);
   fs.writeFileSync(dbFile, JSON.stringify(data));
   res.json({ message: "Task deleted" });
 });
