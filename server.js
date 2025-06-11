@@ -76,5 +76,17 @@ app.delete("/tasks/:id", (req, res) => {
     res.status(500).json({ error: "Failed to delete task" });
   }
 });
+app.get("/tasks/:id", (req, res) => {
+  try {
+    const data = readData();
+    const id = parseInt(req.params.id);
+    const task = data.tasks.find((t) => t.id === id);
+    if (!task) return res.status(404).json({ error: "Task not found" });
+    res.json(task);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to get task" });
+  }
+});
+
 
 app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
